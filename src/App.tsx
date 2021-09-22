@@ -30,7 +30,7 @@ export const artifacts: NoteType[] = Array(100)
   }));
 
 function App() {
-  const [isPixi, setIsPixi] = useState(false);
+  const [isPixi, setIsPixi] = useState(true);
 
   return (
     <div className="App">
