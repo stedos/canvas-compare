@@ -20,7 +20,7 @@ export const artifacts: NoteType[] = Array(100)
     x: 0,
     y: 0,
     size: 100,
-    color: "lightgreen",
+    color: "#90EE90",
     content: "some content",
   })
   .map((a) => ({
