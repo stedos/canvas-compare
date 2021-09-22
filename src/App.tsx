@@ -7,6 +7,7 @@ export type NoteType = {
   y: number;
   size: number;
   content: string;
+  color: string;
 };
 
 export const SIZE = {
@@ -14,12 +15,19 @@ export const SIZE = {
   height: 2160,
 };
 
-export const artifacts: NoteType[] = Array(100).fill({
-  x: 0,
-  y: 0,
-  size: 100,
-  content: "some content",
-});
+export const artifacts: NoteType[] = Array(100)
+  .fill({
+    x: 0,
+    y: 0,
+    size: 100,
+    color: "lightgreen",
+    content: "some content",
+  })
+  .map((a) => ({
+    ...a,
+    x: Math.random() * SIZE.width,
+    y: Math.random() * SIZE.height,
+  }));
 
 function App() {
   const [isPixi, setIsPixi] = useState(false);
