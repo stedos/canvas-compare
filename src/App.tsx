@@ -7,8 +7,16 @@ export const SIZE = {
   height: 2160,
 };
 
+export const artifacts = Array(100).fill({
+  x: 0,
+  y: 0,
+  size: 100,
+  content: "some content",
+});
+
 function App() {
   const [isPixi, setIsPixi] = useState(false);
+
   return (
     <div className="App">
       <button onClick={() => setIsPixi(!isPixi)} />
