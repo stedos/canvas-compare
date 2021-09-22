@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { KonvaComp } from "./konva/konva";
 import { PixiComp } from "./pixi/pixi";
+import FPSStats from "react-fps-stats";
 
 export type NoteType = {
   x: number;
@@ -34,6 +35,7 @@ function App() {
 
   return (
     <div className="App">
+      <FPSStats right={0} />
       <button onClick={() => setIsPixi(!isPixi)}>
         Using: {isPixi ? "Pixi" : "Konva"} (press to toggle)
       </button>

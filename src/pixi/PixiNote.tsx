@@ -1,45 +1,80 @@
-import {Graphics} from "@inlet/react-pixi";
-import {useCallback, useRef, useState} from "react";
+import { BitmapText, Container, Graphics } from "@inlet/react-pixi";
+import { InteractionData, InteractionEvent } from "@pixi/interaction";
+import * as PIXI from "pixi.js";
+import { useCallback, useRef, useState } from "react";
+import { NoteType } from "../App";
+import { getNoteShape } from "../App.utils";
 
-//@ts-ignore
-export const PixiNote = ({ x, y, size, color }) => {
-    const ref = useRef(null);
-    const [alpha, setAlpha] = useState(1)
-    const [isDragging, setIsDragging] = useState(false);
-    const [data, setData] = useState(null);
-    const [localX, setLocalX] = useState(x);
-    const [localY, setLocalY] = useState(y);
+PIXI.BitmapFont.from("TitleFont", {
+  fontFamily: "Arial",
+  fontSize: 20,
+  strokeThickness: 1,
+  fill: "black",
+});
 
-    const parsedColor = parseInt(color.replace(/^#/, ''), 16);
+export const PixiNote: React.FC<NoteType> = ({
+  x,
+  y,
+  size,
+  color,
+  content,
+}) => {
+  const ref = useRef<any>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [data, setData] = useState<InteractionData | undefined>();
+  const [localX, setLocalX] = useState(x);
+  const [localY, setLocalY] = useState(y);
 
-    const draw = useCallback(g => {
-        g.clear();
-        g.beginFill(parsedColor);
-        g.drawRect(0, 0, size, size);
-        g.endFill();
+  const parsedColor = parseInt(color.replace(/^#/, ""), 16);
 
-    }, [])
+  const draw = useCallback(
+    (g: PIXI.Graphics) => {
+      g.clear();
+      g.beginFill(parsedColor);
+      g.drawPolygon(...getNoteShape(size));
+      // g.drawRect(0, 0, size, size);
+      g.endFill();
+    },
+    [size, parsedColor]
+  );
 
-    const onDragStart = useCallback((event) => {
-        setData(event.data)
-        setAlpha(0.5);
-        setIsDragging(true);
-    }, [])
+  const onDragStart = useCallback((event: InteractionEvent) => {
+    setData(event.data);
+    setIsDragging(true);
+  }, []);
 
-    const onDragMove = useCallback(() => {
-        if (isDragging) {
-            // @ts-ignore
-            const newPosition = data?.getLocalPosition?.(ref.current.parent);
-            setLocalX(newPosition.x)
-            setLocalY(newPosition.y)
-        }
-    }, [data, isDragging])
+  const onDragMove = useCallback(() => {
+    if (isDragging) {
+      const newPosition = data?.getLocalPosition?.(ref?.current?.parent);
+      if (!newPosition) return;
+      setLocalX(newPosition.x - size / 2);
+      setLocalY(newPosition.y - size / 2);
+    }
+  }, [data, isDragging, size]);
 
-    const onDragEnd = useCallback(() => {
-        setData(null)
-        setAlpha(1);
-        setIsDragging(false);
-    }, [])
+  const onDragEnd = useCallback(() => {
+    setData(undefined);
+    setIsDragging(false);
+  }, []);
 
-    return <Graphics  ref={ref} x={localX} y={localY} draw={draw} interactive pointerdown={onDragStart} pointermove={onDragMove} pointerup={onDragEnd} pointerupoutside={onDragEnd} alpha={alpha} />
-}
+  return (
+    <Container
+      ref={ref}
+      anchor={0.5}
+      position={[localX, localY]}
+      pointerdown={onDragStart}
+      pointermove={onDragMove}
+      pointerup={onDragEnd}
+      pointerupoutside={onDragEnd}
+      interactive
+    >
+      <Graphics x={0} y={0} draw={draw} alpha={isDragging ? 0.5 : 1} />
+      <BitmapText
+        x={0}
+        y={0}
+        text={content}
+        style={{ fontName: "TitleFont", fontSize: 20, maxWidth: size }}
+      />
+    </Container>
+  );
+};
