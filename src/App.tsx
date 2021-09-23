@@ -1,51 +1,23 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import FPSStats from "react-fps-stats";
 import classNames from "classnames";
 import { KonvaComp } from "./konva/Konva";
 import { PixiComp } from "./pixi/Pixi";
 import { DomComp } from "./dom/Dom";
-
-export type NoteType = {
-  x: number;
-  y: number;
-  size: number;
-  content: string;
-  color: string;
-};
-
-export const SIZE = {
-  width: 3840,
-  height: 2160,
-};
-
-export const artifacts: NoteType[] = Array(100)
-  .fill({
-    x: 0,
-    y: 0,
-    size: 100,
-    color: "#90EE90",
-    content: "some content",
-  })
-  .map((a) => ({
-    ...a,
-    x: Math.random() * SIZE.width,
-    y: Math.random() * SIZE.height,
-  }));
-
-export enum Version {
-  PIXI = "pixi",
-  KONVA = "konva",
-  DOM = "dom",
-}
+import { RenderVersion } from "./App.types";
+import { getArtifacts } from "./App.utils";
 
 function App() {
-  const [selectedVersion, setSelectedVersion] = useState(Version.DOM);
+  const [selectedVersion, setSelectedVersion] = useState(RenderVersion.DOM);
+  const [noOfArtifacts, setNoOfArtifacts] = useState(100);
+
+  const artifacts = useMemo(() => getArtifacts(noOfArtifacts), [noOfArtifacts]);
 
   return (
     <div className="App">
       <FPSStats left="auto" right="0" />
       <div className="buttons">
-        {Object.values(Version).map((version) => (
+        {Object.values(RenderVersion).map((version) => (
           <button
             key={version}
             className={classNames({ selected: selectedVersion === version })}
@@ -54,13 +26,22 @@ function App() {
             {version}
           </button>
         ))}
+        {Object.values([100, 1000, 5000, 10000, 50000]).map((value) => (
+          <button
+            key={value}
+            className={classNames({ selected: value === noOfArtifacts })}
+            onClick={() => setNoOfArtifacts(value)}
+          >
+            {value}
+          </button>
+        ))}
       </div>
-      {selectedVersion === Version.PIXI ? (
-        <PixiComp />
-      ) : selectedVersion === Version.KONVA ? (
-        <KonvaComp />
+      {selectedVersion === RenderVersion.PIXI ? (
+        <PixiComp artifacts={artifacts} />
+      ) : selectedVersion === RenderVersion.KONVA ? (
+        <KonvaComp artifacts={artifacts} />
       ) : (
-        <DomComp />
+        <DomComp artifacts={artifacts} />
       )}
     </div>
   );

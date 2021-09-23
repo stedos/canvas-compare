@@ -2,7 +2,7 @@ import { BitmapText, Container, Graphics } from "@inlet/react-pixi";
 import { InteractionData, InteractionEvent } from "@pixi/interaction";
 import * as PIXI from "pixi.js";
 import { useCallback, useRef, useState } from "react";
-import { NoteType } from "../App";
+import { NoteType } from "../App.types";
 import { getNoteShape } from "../App.utils";
 
 PIXI.BitmapFont.from("TitleFont", {

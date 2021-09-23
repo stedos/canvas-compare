@@ -1,8 +1,9 @@
 import { Stage } from "@inlet/react-pixi";
 import { PixiNote } from "./PixiNote";
-import { artifacts, SIZE } from "../App";
+import { CompProps } from "../App.types";
+import { SIZE } from "../App.utils";
 
-export const PixiComp = () => {
+export const PixiComp = ({ artifacts }: CompProps) => {
   return (
     <Stage
       width={SIZE.width}

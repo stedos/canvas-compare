@@ -1,5 +1,5 @@
 import { Text, Group, Line } from "react-konva";
-import { NoteType } from "../App";
+import { NoteType } from "../App.types";
 import { getNoteShape } from "../App.utils";
 
 export const KonvaNote: React.FC<NoteType> = ({

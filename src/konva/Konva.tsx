@@ -1,8 +1,9 @@
 import { Layer, Stage } from "react-konva";
-import { artifacts, SIZE } from "../App";
+import { CompProps } from "../App.types";
+import { SIZE } from "../App.utils";
 import { KonvaNote } from "./KonvaNote";
 
-export const KonvaComp = () => {
+export const KonvaComp = ({ artifacts }: CompProps) => {
   return (
     <Stage width={SIZE.width} height={SIZE.height}>
       <Layer>

@@ -1,7 +1,8 @@
-import { artifacts, SIZE } from "../App";
+import { CompProps } from "../App.types";
+import { SIZE } from "../App.utils";
 import { DomNote } from "./DomNote";
 
-export const DomComp = () => {
+export const DomComp = ({ artifacts }: CompProps) => {
   return (
     <div
       style={{
