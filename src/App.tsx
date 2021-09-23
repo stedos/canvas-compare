@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import { KonvaComp } from "./konva/konva";
-import { PixiComp } from "./pixi/pixi";
+import { useState } from "react";
 import FPSStats from "react-fps-stats";
+import classNames from "classnames";
+import { KonvaComp } from "./konva/Konva";
+import { PixiComp } from "./pixi/Pixi";
+import { DomComp } from "./dom/Dom";
 
 export type NoteType = {
   x: number;
@@ -30,16 +32,36 @@ export const artifacts: NoteType[] = Array(100)
     y: Math.random() * SIZE.height,
   }));
 
+export enum Version {
+  PIXI = "pixi",
+  KONVA = "konva",
+  DOM = "dom",
+}
+
 function App() {
-  const [isPixi, setIsPixi] = useState(true);
+  const [selectedVersion, setSelectedVersion] = useState(Version.DOM);
 
   return (
     <div className="App">
-      <FPSStats right={0} />
-      <button onClick={() => setIsPixi(!isPixi)}>
-        Using: {isPixi ? "Pixi" : "Konva"} (press to toggle)
-      </button>
-      {isPixi ? <PixiComp /> : <KonvaComp />}
+      <FPSStats left="auto" right="0" />
+      <div className="buttons">
+        {Object.values(Version).map((version) => (
+          <button
+            key={version}
+            className={classNames({ selected: selectedVersion === version })}
+            onClick={() => setSelectedVersion(version)}
+          >
+            {version}
+          </button>
+        ))}
+      </div>
+      {selectedVersion === Version.PIXI ? (
+        <PixiComp />
+      ) : selectedVersion === Version.KONVA ? (
+        <KonvaComp />
+      ) : (
+        <DomComp />
+      )}
     </div>
   );
 }

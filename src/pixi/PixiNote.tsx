@@ -32,7 +32,6 @@ export const PixiNote: React.FC<NoteType> = ({
       g.clear();
       g.beginFill(parsedColor);
       g.drawPolygon(...getNoteShape(size));
-      // g.drawRect(0, 0, size, size);
       g.endFill();
     },
     [size, parsedColor]
