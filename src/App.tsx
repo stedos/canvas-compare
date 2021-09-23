@@ -8,7 +8,7 @@ import { RenderVersion } from "./App.types";
 import { getArtifacts } from "./App.utils";
 
 function App() {
-  const [selectedVersion, setSelectedVersion] = useState(RenderVersion.DOM);
+  const [selectedVersion, setSelectedVersion] = useState(RenderVersion.PIXI);
   const [noOfArtifacts, setNoOfArtifacts] = useState(100);
 
   const artifacts = useMemo(() => getArtifacts(noOfArtifacts), [noOfArtifacts]);
@@ -26,7 +26,7 @@ function App() {
             {version}
           </button>
         ))}
-        {Object.values([100, 1000, 5000, 10000, 50000]).map((value) => (
+        {Object.values([5, 100, 500, 1000, 5000]).map((value) => (
           <button
             key={value}
             className={classNames({ selected: value === noOfArtifacts })}
