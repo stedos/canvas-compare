@@ -25,16 +25,15 @@ export const PixiNote: React.FC<NoteType> = ({
   const [localX, setLocalX] = useState(x);
   const [localY, setLocalY] = useState(y);
 
-  const parsedColor = parseInt(color.replace(/^#/, ""), 16);
-
   const draw = useCallback(
     (g: PIXI.Graphics) => {
+      const parsedColor = parseInt(color.replace(/^#/, ""), 16);
       g.clear();
       g.beginFill(parsedColor);
       g.drawPolygon(...getNoteShape(size));
       g.endFill();
     },
-    [size, parsedColor]
+    [size, color]
   );
 
   const onDragStart = useCallback((event: InteractionEvent) => {

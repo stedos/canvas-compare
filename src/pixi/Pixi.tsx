@@ -8,7 +8,7 @@ export const PixiComp = ({ artifacts }: CompProps) => {
     <Stage
       width={SIZE.width}
       height={SIZE.height}
-      options={{ backgroundColor: 0xfafafa }}
+      options={{ backgroundColor: 0xfafafa, resolution: 1 }}
     >
       {artifacts.map((artifact, index) => (
         <PixiNote key={index} {...artifact} />
